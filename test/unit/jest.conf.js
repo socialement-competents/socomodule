@@ -18,7 +18,7 @@ module.exports = {
   },
   transform: {
     '^.+\\.js$': '<rootDir>/node_modules/babel-jest',
-    '^.+\\.(ts)$': 'ts-jest',
+    '^.+\\.(ts)$': '<rootDir>/node_modules/ts-jest',
     '.*\\.(vue)$': '<rootDir>/node_modules/vue-jest'
   },
   testPathIgnorePatterns: [
@@ -32,9 +32,10 @@ module.exports = {
   mapCoverage: true,
   coverageDirectory: '<rootDir>/test/unit/coverage',
   collectCoverageFrom: [
-    'src/**/*.{js,vue}',
-    '!src/main.js',
-    '!src/router/index.js',
+    'src/**/*.{ts,js,vue}',
+    '!src/main.ts',
+    '!src/router/index.ts',
+    '!src/**/*.(d).(ts)',
     '!**/node_modules/**'
   ]
 }
