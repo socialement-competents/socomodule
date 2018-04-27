@@ -39,6 +39,9 @@ jobs:
       - run:
           name: End to end test
           command: yarn e2e
+      - run:
+          name: Export code coverage to Codecov
+          command: yarn ccov
       - store_test_results:
           path: ./test/unit/coverage
 
