@@ -46,7 +46,7 @@ jobs:
     <<: *node
     steps:
       - attach_workspace:
-          at: ./
+          at: .
       - run:
           name: Build the app
           command: yarn build
