@@ -1,5 +1,5 @@
 import Vue, { AsyncComponent } from 'vue'
-import Router, { RouteConfig, Route, NavigationGuard } from 'vue-router'
+import Router, { RouteConfig } from 'vue-router'
 
 const HelloWorld: AsyncComponent = (): any => import('@/components/HelloWorld.vue')
 

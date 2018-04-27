@@ -1,9 +1,9 @@
 import { ActionTree } from 'vuex'
-import TYPES from './types'
+import TYPES from '@/store/types'
 
 const actions: ActionTree<any, any> = {
   // 获取modules
-  setLogin({ state, commit }, flag: boolean): void {
+  setLogin ({ state, commit }, flag: boolean): void {
     commit(TYPES.SET_LOGIN_STATUS, flag)
   }
 }

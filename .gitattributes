@@ -1,5 +1,6 @@
 build/* linguist-vendored
 config/* linguist-vendored
+test/e2e/* linguist-vendored
 .postcssrc.js linguist-vendored
 .eslintrc.js linguist-vendored
 *.js linguist-language=Vue
