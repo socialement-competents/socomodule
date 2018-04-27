@@ -14,6 +14,7 @@ jobs:
       - restore_cache:
           keys:
             - dependencies-{{ checksum "yarn.lock" }}
+            - dependencies
       - run:
         name: Install dependencies
         command: yarn
