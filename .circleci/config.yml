@@ -23,22 +23,22 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-              - "*"
+            - "*"
   
   test:
     <<: *node
     steps:
       - attach_workspace:
-         at: .
+          at: .
       - run:
-        name: Lint the code
-        command: yarn lint
+          name: Lint the code
+          command: yarn lint
       - run:
-        name: Unit test
-        command: yarn unit --ci
+          name: Unit test
+          command: yarn unit --ci
       - run:
-        name: End to end test
-        command: yarn e2e
+          name: End to end test
+          command: yarn e2e
 
   build:
     <<: *node
@@ -46,8 +46,8 @@ jobs:
       - attach_workspace:
           at: ./
       - run:
-         name: Build the app
-         command: yarn build
+          name: Build the app
+          command: yarn build
       - store_artifacts:
           path: ./dist
 
