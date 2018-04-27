@@ -39,6 +39,8 @@ jobs:
       - run:
           name: End to end test
           command: yarn e2e
+      - store_test_results:
+          path: test/unit/coverage
 
   build:
     <<: *node
