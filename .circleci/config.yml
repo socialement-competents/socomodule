@@ -1,7 +1,6 @@
 version: 2
 
 node: &node
-  working_directory: /tmp
   docker:
     - image: circleci/node:9.11.1
 
@@ -10,7 +9,7 @@ jobs:
     <<: *node
     steps:
       - attach_workspace:
-          at: /tmp
+          at: .
       - checkout
       - restore_cache:
           keys:
@@ -28,7 +27,7 @@ jobs:
     <<: *node
     steps:
       - attach_workspace:
-         at: /tmp
+         at: .
       - run:
         name: Lint the code
         command: yarn lint
