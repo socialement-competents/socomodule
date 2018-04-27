@@ -8,8 +8,6 @@ jobs:
   create_base_env:
     <<: *node
     steps:
-      - attach_workspace:
-          at: .
       - checkout
       - restore_cache:
           keys:
@@ -22,6 +20,10 @@ jobs:
           paths:
             - node_modules
           key: dependencies-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: .
+          paths:
+              - "*"
   
   test:
     <<: *node
@@ -37,10 +39,6 @@ jobs:
       - run:
         name: End to end test
         command: yarn e2e
-      - persist_to_workspace:
-          root: .
-          paths:
-              - "*"
 
   build:
     <<: *node
