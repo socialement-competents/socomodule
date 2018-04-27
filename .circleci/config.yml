@@ -9,7 +9,7 @@ jobs:
     <<: *node
     steps:
       - attach_workspace:
-        at: ./
+        at: /tmp
       - checkout
       - restore_cache:
           keys:
