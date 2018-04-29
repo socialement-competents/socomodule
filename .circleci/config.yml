@@ -67,13 +67,13 @@ jobs:
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
           name: Build the container
-          command: docker build -t $D0CKER_IMAGE:$CIRCLE_SHA1 -f CI.Dockerfile .
+          command: docker build -t $DOCKER_IMAGE_NAME:$CIRCLE_SHA1 -f CI.Dockerfile .
       - run:
           name: Add latest tag
-          command: docker tag $D0CKER_IMAGE:$CIRCLE_SHA1 $D0CKER_IMAGE:latest
+          command: docker tag $DOCKER_IMAGE_NAME:$CIRCLE_SHA1 $DOCKER_IMAGE_NAME:latest
       - run:
           name: Push to the Docker Hub registry
-          command: docker push $D0CKER_IMAGE:$CIRCLE_SHA1 && docker push $D0CKER_IMAGE:latest
+          command: docker push $DOCKER_IMAGE_NAME:$CIRCLE_SHA1 && docker push $DOCKER_IMAGE_NAME:latest
 
 workflows:
   version: 2
@@ -90,7 +90,7 @@ workflows:
           requires:
             - build
           environment:
-            D0CKER_IMAGE: "socialementcompetents/hackafront"
+            DOCKER_IMAGE_NAME: "socialementcompetents/hackafront"
           filters:
             branches:
               only:
