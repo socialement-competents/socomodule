@@ -47,8 +47,6 @@ jobs:
 
   build:
     <<: *node
-    environment:
-      IMAGE: "socialementcompetents/hackafront"
     steps:
       - attach_workspace:
           at: .
@@ -60,6 +58,8 @@ jobs:
 
   dockerize:
     machine: true
+    environment:
+      IMAGE: "socialementcompetents/hackafront"
     steps:
       - attach_workspace:
           at: .
