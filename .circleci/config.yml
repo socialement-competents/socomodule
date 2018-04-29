@@ -56,7 +56,7 @@ jobs:
       - store_artifacts:
           path: ./dist
 
-  deploy:
+  dockerize:
     machine: true
     steps:
       - setup_remote_docker
@@ -67,17 +67,17 @@ jobs:
           command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
           name: Build the container
-          command: docker build -t $IMAGE:$CIRCLE_SHA1 -f CI.Dockerfile .
+          command: docker build -t $D0CKER_IMAGE:$CIRCLE_SHA1 -f CI.Dockerfile .
       - run:
           name: Add latest tag
-          command: docker tag $IMAGE:$CIRCLE_SHA1 $IMAGE:latest
+          command: docker tag $D0CKER_IMAGE:$CIRCLE_SHA1 $D0CKER_IMAGE:latest
       - run:
           name: Push to the Docker Hub registry
-          command: docker push $IMAGE:$CIRCLE_SHA1 && docker push $IMAGE:latest
+          command: docker push $D0CKER_IMAGE:$CIRCLE_SHA1 && docker push $D0CKER_IMAGE:latest
 
 workflows:
   version: 2
-  test_and_build:
+  test_build_deploy:
     jobs:
       - create_base_env
       - test:
@@ -86,11 +86,11 @@ workflows:
       - build:
           requires:
             - create_base_env
-      - deploy:
+      - dockerize:
           requires:
             - build
           environment:
-            IMAGE: "socialementcompetents/hackafront"
+            D0CKER_IMAGE: "socialementcompetents/hackafront"
           filters:
             branches:
               only:
