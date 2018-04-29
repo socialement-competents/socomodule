@@ -61,7 +61,6 @@ jobs:
   dockerize:
     machine: true
     steps:
-      - setup_remote_docker
       - attach_workspace:
           at: .
       - run:
