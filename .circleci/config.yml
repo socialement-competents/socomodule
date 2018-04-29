@@ -56,6 +56,25 @@ jobs:
       - store_artifacts:
           path: ./dist
 
+  deploy:
+    machine: true
+    steps:
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          name: Connect to Docker Hub
+          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run:
+          name: Build the container
+          command: docker build -t $IMAGE:$CIRCLE_SHA1 -f CI.Dockerfile .
+      - run:
+          name: Add latest tag
+          command: docker tag $IMAGE:$CIRCLE_SHA1 $IMAGE:latest
+      - run:
+          name: Push to the Docker Hub registry
+          command: docker push $IMAGE:$CIRCLE_SHA1 && docker push $IMAGE:latest
+
 workflows:
   version: 2
   test_and_build:
@@ -67,3 +86,12 @@ workflows:
       - build:
           requires:
             - create_base_env
+      - deploy:
+          requires:
+            - build
+          environment:
+            IMAGE: "socialementcompetents/hackafront"
+          filters:
+            branches:
+              only:
+                - master
