@@ -8,49 +8,53 @@ jobs:
   create_base_env:
     <<: *node
     steps:
-      - attach_workspace:
-        at: ./
       - checkout
       - restore_cache:
           keys:
             - dependencies-{{ checksum "yarn.lock" }}
+            - dependencies
       - run:
-        name: Install dependencies
-        command: yarn
+          name: Install dependencies
+          command: yarn
       - save_cache:
           paths:
             - node_modules
           key: dependencies-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - "*"
   
   test:
     <<: *node
     steps:
       - attach_workspace:
-        at: ./
+          at: .
       - run:
-        name: Lint the code
-        command: yarn lint
+          name: Lint the code
+          command: yarn lint
       - run:
-        name: Unit test
-        command: yarn unit --ci
+          name: Unit test
+          command: yarn unit --ci --testResultsProcessor="jest-junit"
       - run:
-        name: End to end test
-        command: yarn e2e
-      - persist_to_workspace:
-          root: .
-          paths:
-              - "*"
+          name: End to end test
+          command: yarn e2e
+      - run:
+          name: Export code coverage to Codecov
+          command: yarn ccov
+      - store_test_results:
+          path: ./test/unit/coverage
 
   build:
     <<: *node
     steps:
       - attach_workspace:
-        at: ./
+          at: .
       - run:
-        name: Build the app
-        command: yarn build
+          name: Build the app
+          command: yarn build
       - store_artifacts:
-        path: ./dist
+          path: ./dist
 
 workflows:
   version: 2
@@ -58,8 +62,8 @@ workflows:
     jobs:
       - create_base_env
       - test:
-        requires:
-         - create_base_env
+          requires:
+            - create_base_env
       - build:
-        requires:
-         - create_base_env
+          requires:
+            - create_base_env

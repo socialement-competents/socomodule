@@ -1,3 +1,8 @@
+![Node](https://img.shields.io/badge/node-9.11.1-brightgreen.svg)
+[![CircleCI](https://img.shields.io/circleci/project/github/socialement-competents/hackafront.svg)](https://circleci.com/gh/socialement-competents/hackafront)
+[![Code coverage with Codecov](https://img.shields.io/codecov/c/github/socialement-competents/hackafront.svg)](https://codecov.io/gh/socialement-competents/hackafront)
+![No license](https://img.shields.io/github/license/socialement-competents/hackafront.svg)
+
 # hackafront
 
 > Front pour gagner le hackaton
