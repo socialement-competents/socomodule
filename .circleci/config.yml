@@ -80,6 +80,18 @@ jobs:
           name: Push to the Docker Hub registry
           command: docker push $IMAGE:$CIRCLE_SHA1 && docker push $IMAGE:latest
 
+  publish:
+    machine: true
+    steps:
+      - attach_workspace:
+          at: .
+      - run:
+          name: Zip and publish the built files to Github Releases
+          command: |
+            cd dist &&
+            chmod +x ../release.sh &&
+            ../release.sh
+
 workflows:
   version: 2
   test_build_deploy:
@@ -99,3 +111,11 @@ workflows:
             branches:
               only:
                 - master
+      - publish:
+          requires:
+            - build
+            - test
+          filters:
+            tags:
+              only:
+                - /^v.*/
