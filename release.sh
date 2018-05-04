@@ -25,7 +25,6 @@ curl -i -s -X POST -H "Content-Type:application/json" -H "Authorization: token $
 # Get the assets upload URL and truncate the last weird part
 UPLOAD_URL=$(curl -sS "${RELEASES_URL}/tags/${CIRCLE_TAG}" | jq -r '.upload_url' | cut -d{ -f1)
 # Build the actual upload URL from it
-LABEL="transpiled_files_to_serve_from_a_Web_Server"
 ASSET_URL="${UPLOAD_URL}/assets?name=${FILENAME}"
 # Send the file as binary in the request body
 curl -i -X POST -H "Content-Type:application/zip" -H "Authorization: token ${GITHUB_API_TOKEN}" ${ASSET_URL} --data-binary "@${FILENAME}"
