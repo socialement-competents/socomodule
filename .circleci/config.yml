@@ -96,7 +96,10 @@ workflows:
   version: 2
   test_build_deploy:
     jobs:
-      - create_base_env
+      - create_base_env:
+          filters:
+            tags:
+              only: /.*/
       - test:
           requires:
             - create_base_env
