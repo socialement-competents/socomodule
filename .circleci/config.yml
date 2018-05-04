@@ -115,8 +115,7 @@ workflows:
             - test
           filters:
             branches:
-              only:
-                - master
+              only: master
             tags:
               only: /.*/
       - publish:
