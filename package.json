@@ -10,6 +10,7 @@
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "ccov": "codecov -f test/unit/coverage/coverage-final.json $CODECOV_TOKEN",
     "codacy": "cat ./test/unit/coverage/lcov.info | codacy-coverage",
+    "codacy:windows": "codacy-coverage < ./test/unit/coverage/lcov.info",
     "e2e": "node test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .ts,.js,.vue src test/unit/specs test/e2e/specs",
