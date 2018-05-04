@@ -100,9 +100,15 @@ workflows:
       - test:
           requires:
             - create_base_env
+          filters:
+            tags:
+              only: /.*/
       - build:
           requires:
             - create_base_env
+          filters:
+            tags:
+              only: /.*/
       - dockerize:
           requires:
             - build
@@ -111,6 +117,9 @@ workflows:
             branches:
               only:
                 - master
+          filters:
+            tags:
+              only: /.*/
       - publish:
           requires:
             - build
