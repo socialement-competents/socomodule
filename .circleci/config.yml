@@ -88,6 +88,8 @@ jobs:
       - run:
           name: Zip and publish the built files to Github Releases
           command: |
+            sudo apt-get update &&
+            sudo apt-get install -y zip bzip2 tar &&
             cd dist &&
             chmod +x ../release.sh &&
             ../release.sh
@@ -119,8 +121,6 @@ workflows:
           filters:
             branches:
               only: master
-            tags:
-              only: /.*/
       - publish:
           requires:
             - build

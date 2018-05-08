@@ -10,6 +10,7 @@
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "ccov": "codecov -f test/unit/coverage/coverage-final.json $CODECOV_TOKEN",
     "e2e": "node test/e2e/runner.js",
+    "release": "echo \"git commit => git tag -a v1.0.0 -m \"miguel a la plage\" => git push origin --tags\"",
     "test": "npm run unit && npm run e2e",
     "lint": "eslint --ext .ts,.js,.vue src test/unit/specs test/e2e/specs",
     "build": "node build/build.js"
