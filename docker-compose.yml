@@ -22,8 +22,7 @@ services:
       context: .
       dockerfile: Dockerfile
     environment:
-      - SERVER_HOST=back
-      - SERVER_PORT=3333
+      - SERVER_URL=http://back:333/graphql
     ports:
       - 8080:80
     depends_on: 

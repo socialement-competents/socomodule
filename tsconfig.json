@@ -35,7 +35,7 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "@/*": ["src/*"]
+      "@": ["src"]
     },
     "sourceMap": true,
     "pretty": true

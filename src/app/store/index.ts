@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import actions from '@/store/actions'
-import mutations from '@/store/mutations'
-import getters from '@/store/getters'
+import actions from '@/app/store/actions'
+import mutations from '@/app/store/mutations'
+import getters from '@/app/store/getters'
 
 Vue.use(Vuex)
 
@@ -10,7 +10,7 @@ interface State {
   login: boolean
 }
 
-let state: State = {
+const state: State = {
   login: false
 }
 

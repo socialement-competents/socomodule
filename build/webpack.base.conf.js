@@ -32,7 +32,7 @@ module.exports = {
       : config.dev.assetsPublicPath
   },
   resolve: {
-    extensions: ['.js', '.vue', '.json', '.ts'],
+    extensions: ['.js', '.vue', '.json', '.ts', '.gql', '.graphql'],
     alias: {
       'vue$': 'vue/dist/vue.esm.js',
       '@': resolve('src'),
@@ -52,6 +52,10 @@ module.exports = {
         options: {
           appendTsSuffixTo: [/\.vue$/],
         }
+      },
+      {
+        test: /\.(graphql|gql)$/,
+        loader: 'graphql-tag/loader',
       },
       {
         test: /\.js$/,
