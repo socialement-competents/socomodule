@@ -104,6 +104,8 @@ The code is linted with [ESLint](https://eslint.org/) and
 [TSLint](https://palantir.github.io/tslint/), and tested with
 [Jest](https://facebook.github.io/jest/) and
 [Nightwatch](http://nightwatchjs.org/).
+The test coverage results are uploaded to
+[Codecov](https://codecov.io/gh/socialement-competents/hackafront).
 
 It is continuously tested and build with [CircleCI](https://circleci.com),
 and published to the
