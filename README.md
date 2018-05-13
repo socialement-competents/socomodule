@@ -120,3 +120,14 @@ Every branch is automatically deployed and updated at
 The code is reviewed by 2 static analysis providers:
 - [Deepscan](https://deepscan.io/dashboard/#view=project&pid=2362&bid=14124)
 - [Codacy](https://app.codacy.com/app/tsauvajon/hackafront/dashboard)
+
+## CircleCI
+
+Environment variables to set on CircleCI:
+- `CODACY_PROJECT_TOKEN`: Settings > Integrations > Project API > Settings
+- `CODECOV_TOKEN`: Settings > Repository Upload Token
+- `DOCKER_USER`: Docker Hub username to push the images
+- `DOCKER_PASS`: Docker Hub password
+- `GITHUB_API_TOKEN`: https://github.com/settings/tokens > generate new token >
+  scopes `repo` and `admin:repo_hook` (used to publish release + publish recaps)
+- `GITHUB_TOKEN`: same ^
