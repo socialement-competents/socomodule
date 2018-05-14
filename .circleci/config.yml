@@ -38,7 +38,7 @@ jobs:
           command: yarn unit --ci --testResultsProcessor="jest-junit"
       - run:
           name: End to end test
-          command: yarn e2e
+          command: yarn test
       - run:
           name: Export code coverage to Codecov
           command: yarn ccov
@@ -62,26 +62,6 @@ jobs:
           root: .
           paths:
             - "./dist"
-
-  dockerize:
-    machine: true
-    environment:
-      IMAGE: "socialementcompetents/hackafront"
-    steps:
-      - attach_workspace:
-          at: .
-      - run:
-          name: Connect to Docker Hub
-          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
-      - run:
-          name: Build the container
-          command: docker build -t $IMAGE:$CIRCLE_SHA1 -f CI.Dockerfile .
-      - run:
-          name: Add latest tag
-          command: docker tag $IMAGE:$CIRCLE_SHA1 $IMAGE:latest
-      - run:
-          name: Push to the Docker Hub registry
-          command: docker push $IMAGE:$CIRCLE_SHA1 && docker push $IMAGE:latest
 
   publish:
     machine: true
@@ -117,13 +97,6 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - dockerize:
-          requires:
-            - build
-            - test
-          filters:
-            branches:
-              only: master
       - publish:
           requires:
             - build
