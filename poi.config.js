@@ -1,5 +1,4 @@
 const presetKarma = require('poi-preset-karma');
-const webpack = require('webpack');
 const glob = require('glob').sync;
 const {name} = require('./package.json');
 
