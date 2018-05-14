@@ -2,7 +2,7 @@
 [![Styled with ESLint](https://img.shields.io/badge/styled%20with-eslint-brightgreen.svg)](https://github.com/eslint/eslint)
 [![CircleCI](https://img.shields.io/circleci/project/github/socialement-competents/socomodule.svg)](https://circleci.com/gh/socialement-competents/socomodule)
 [![Code coverage with Codecov](https://img.shields.io/codecov/c/github/socialement-competents/socomodule.svg)](https://codecov.io/gh/socialement-competents/socomodule)
-[![Code quality with Codacy](https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg)](https://app.codacy.com/app/tsauvajon/socomodule)
+[![Code quality with Codacy](https://img.shields.io/codacy/grade/5679e9b02c8145e4b37a7bbaac3e3831.svg)](https://app.codacy.com/app/socialementcompetentsbot/socomodule)
 ![No license](https://img.shields.io/github/license/socialement-competents/socomodule.svg)
 [![CircleCI](https://img.shields.io/docker/pulls/socialementcompetents/socomodule.svg)](https://hub.docker.com/r/socialementcompetents/socomodule/)
 
