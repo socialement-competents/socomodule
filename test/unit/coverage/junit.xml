@@ -1,0 +1,6 @@
+<testsuites name="Jest unit testing" tests="1" failures="0" time="1.588">
+  <testsuite name="\test\unit\specs\socomodule.spec.ts" errors="0" failures="0" skipped="0" timestamp="2018-05-14T16:38:03" time="1.588" tests="1">
+    <testcase classname="socomodule.vue-renders correct contents" name="renders correct contents" time="0.013">
+    </testcase>
+  </testsuite>
+</testsuites>
