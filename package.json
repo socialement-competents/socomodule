@@ -6,16 +6,16 @@
   "main": "dist/socomodule.min.js",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint src/**/*.vue",
+    "lint": "tslint -c tslint.json src/**/*.ts test/**/*.ts && eslint src/**/*.vue",
     "build": "poi build --format cjs --dist dist; poi build --format umd --dist dist/umd",
     "build:doc": "vue-styleguidist build",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "ccov": "codecov -f test/unit/coverage/coverage-final.json $CODECOV_TOKEN",
     "codacy": "cat ./test/unit/coverage/lcov.info | codacy-coverage",
     "serve": "vue-styleguidist server",
-    "test": "poi test",
-    "test:watch": "poi test --watch",
-    "test:cov": "poi test --coverage"
+    "e2e": "poi test",
+    "e2e:watch": "poi test --watch",
+    "e2e:cov": "poi test --coverage"
   },
   "keywords": [
     "vue",
@@ -29,6 +29,7 @@
     "vue": "^2.5.3"
   },
   "devDependencies": {
+    "@vue/test-utils": "^1.0.0-beta.16",
     "babel-plugin-istanbul": "^4.1.1",
     "babel-plugin-transform-runtime": "^6.22.0",
     "babel-preset-env": "^1.3.2",
@@ -40,13 +41,18 @@
     "eslint-plugin-vue": "beta",
     "jest": "^22.4.3",
     "jest-junit": "^3.7.0",
+    "jest-serializer-vue": "^1.0.0",
     "karma-chai": "^0.1.0",
     "karma-phantomjs-launcher": "^1.0.4",
     "karma-phantomjs-shim": "^1.5.0",
     "node-glob": "^1.2.0",
     "poi": "^9.5.2",
     "poi-preset-karma": "^9.2.1",
+    "ts-jest": "^22.4.6",
+    "ts-loader": "^4.3.0",
+    "tslint": "^5.10.0",
     "typescript": "^2.6.1",
+    "vue-jest": "^2.5.0",
     "vue-styleguidist": "^1.4.4",
     "vue-webpack-loaders": "^1.0.6",
     "webpack": "^3.1.0"

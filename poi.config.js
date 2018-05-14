@@ -13,7 +13,7 @@ module.exports = {
   html: false,
   presets: [
     presetKarma({
-      files: ['./test/specs/**.spec.js'],
+      files: ['./test/e2e/specs/**.spec.js'],
       browsers: ['PhantomJS'],
       frameworks: ['mocha', 'chai', 'phantomjs-shim'],
     })

@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import Component from '../../src/socomodule/socomodule';
+import Component from '../../../src/socomodule/socomodule';
 
 describe('socomodule.vue', () => {
   const Constructor = Vue.extend(Component);
