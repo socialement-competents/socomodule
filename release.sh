@@ -3,7 +3,7 @@
 # Download the github-release executable
 GITHUB_RELEASE_GO=https://github.com/aktau/github-release/releases/download/v0.7.2/linux-amd64-github-release.tar.bz2
 curl -sL $GITHUB_RELEASE_GO | tar xvjf -
-GR=bin/linux/amd64/github-release
+GR=${PWD}/bin/linux/amd64/github-release
 chmod +x $GR
 
 # Create a GitHub release
