@@ -1,12 +1,12 @@
 ![Node](https://img.shields.io/badge/node-9.11.1-brightgreen.svg)
 [![Styled with ESLint](https://img.shields.io/badge/styled%20with-eslint-brightgreen.svg)](https://github.com/eslint/eslint)
-[![CircleCI](https://img.shields.io/circleci/project/github/socialement-competents/hackafront.svg)](https://circleci.com/gh/socialement-competents/hackafront)
-[![Code coverage with Codecov](https://img.shields.io/codecov/c/github/socialement-competents/hackafront.svg)](https://codecov.io/gh/socialement-competents/hackafront)
-[![Code quality with Codacy](https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg)](https://app.codacy.com/app/tsauvajon/hackafront)
-![No license](https://img.shields.io/github/license/socialement-competents/hackafront.svg)
-[![CircleCI](https://img.shields.io/docker/pulls/socialementcompetents/hackafront.svg)](https://hub.docker.com/r/socialementcompetents/hackafront/)
+[![CircleCI](https://img.shields.io/circleci/project/github/socialement-competents/socomodule.svg)](https://circleci.com/gh/socialement-competents/socomodule)
+[![Code coverage with Codecov](https://img.shields.io/codecov/c/github/socialement-competents/socomodule.svg)](https://codecov.io/gh/socialement-competents/socomodule)
+[![Code quality with Codacy](https://img.shields.io/codacy/grade/e27821fb6289410b8f58338c7e0bc686.svg)](https://app.codacy.com/app/tsauvajon/socomodule)
+![No license](https://img.shields.io/github/license/socialement-competents/socomodule.svg)
+[![CircleCI](https://img.shields.io/docker/pulls/socialementcompetents/socomodule.svg)](https://hub.docker.com/r/socialementcompetents/socomodule/)
 
-# hackafront
+# socomodule
 
 > Hackaton front-end template with Vue.js, TypeScript, GraphQL, JWT and some
 CI set up.
@@ -105,21 +105,21 @@ The code is linted with [ESLint](https://eslint.org/) and
 [Jest](https://facebook.github.io/jest/) and
 [Nightwatch](http://nightwatchjs.org/).
 The test coverage results are uploaded to
-[Codecov](https://codecov.io/gh/socialement-competents/hackafront).
+[Codecov](https://codecov.io/gh/socialement-competents/socomodule).
 
 It is continuously tested and build with [CircleCI](https://circleci.com),
 and published to the
-[Docker Hub](https://hub.docker.com/r/socialementcompetents/hackafront/)
+[Docker Hub](https://hub.docker.com/r/socialementcompetents/socomodule/)
 on every push to the master branch.
 
 Every branch is automatically deployed and updated at
-`https://[branch]--hackafront.netlify.com` and every pull request at
-`https://deploy-preview-[#pr]--hackafront.netlify.com`, with
+`https://[branch]--socomodule.netlify.com` and every pull request at
+`https://deploy-preview-[#pr]--socomodule.netlify.com`, with
 [Netlify](https://www.netlify.com).
 
 The code is reviewed by 2 static analysis providers:
 - [Deepscan](https://deepscan.io/dashboard/#view=project&pid=2362&bid=14124)
-- [Codacy](https://app.codacy.com/app/tsauvajon/hackafront/dashboard)
+- [Codacy](https://app.codacy.com/app/tsauvajon/socomodule/dashboard)
 
 ## CircleCI
 
