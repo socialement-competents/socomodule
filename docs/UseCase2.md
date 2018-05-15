@@ -1,6 +1,10 @@
-You can add more examples!
+## Use in any web application
 
-    <socomodule text="Hello World!" style="background-color: pink;"></socomodule>
+```html
+<script src="https://unpkg.com/vue" charset="utf-8"></script>
+<script src="./node_modules/socomodule/socomodule.min.js" charset="utf-8"></script>
 
-* Remember that you can also update styleguide.config.js to use your own
-own doc definitions
+<script type="text/javascript">
+  Vue.component('socomodule', window.Socomodule);
+</script>
+```
