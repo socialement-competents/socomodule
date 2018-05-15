@@ -2,14 +2,18 @@
 
 ## Install socomodule
 
-With npm:
+**With npm**:
 
 ```sh
 npm install --save-dev socomodule
 ```
 
-With yarn:
+**With yarn**:
 
 ```sh
 yarn add -D socomodule
 ```
+
+**Download and version it yourself**:
+
+Check out the [GitHub releases](https://github.com/socialement-competents/socomodule/releases).
