@@ -14,9 +14,7 @@
     "competents"
   ],
   "files": [
-    "."
-  ],
-  "dependencies": {
-    "vue": "^2.5.3"
-  }
+    "socomodule.min.js",
+    "socomodule.min.css"
+  ]
 }
