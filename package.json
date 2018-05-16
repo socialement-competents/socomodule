@@ -3,11 +3,11 @@
   "version": "0.0.1",
   "description": "A Vue.js component module",
   "author": "",
-  "main": "dist/socomodule.min.js",
+  "main": "dist/cjs/socomodule.min.js",
   "license": "MIT",
   "scripts": {
     "lint": "tslint -c tslint.json src/**/*.ts test/**/*.ts && eslint src/**/*.vue",
-    "build": "poi build --format cjs --dist dist; poi build --format umd --dist dist/umd",
+    "build": "poi build --format cjs --dist dist/cjs; poi build --format umd --dist dist/umd",
     "build:doc": "vue-styleguidist build",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "ccov": "codecov -f test/unit/coverage/coverage-final.json $CODECOV_TOKEN",
