@@ -1,3 +1,22 @@
-Just an example contained in a single doc file
+## Use in a Vue.js app
 
-    <socomodule text="Hello World!" style="color: red;"></socomodule>
+```
+<template>
+  <div>
+    ...
+    <socomodule></socomodule>
+    ...
+  </div>
+</template>
+
+<script>
+import socomodule from 'socomodule'
+
+export default {
+  name: 'my-component',
+  components: {
+    socomodule
+  }
+}
+</script>
+```

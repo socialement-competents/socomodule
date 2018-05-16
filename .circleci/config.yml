@@ -71,11 +71,16 @@ jobs:
       - run:
           name: Zip and publish the built files to Github Releases
           command: |
-            sudo apt-get update &&
-            sudo apt-get install -y zip bzip2 tar &&
-            cd dist &&
-            chmod +x ../release.sh &&
+            sudo apt-get update
+            sudo apt-get install -y zip bzip2 tar
+            cd dist
+            chmod +x ../release.sh
             ../release.sh
+      - run:
+          name: Publish to npm
+          command: |
+            chmod +x package/publish.sh
+            package/publish.sh          
 
 workflows:
   version: 2
