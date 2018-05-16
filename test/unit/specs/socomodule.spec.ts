@@ -4,12 +4,8 @@ import Socomodule from '../../../src/socomodule/socomodule'
 
 describe('socomodule.vue', () => {
   it('renders correct contents', () => {
-    const wrapper = mount(Socomodule,  {
-      propsData: {
-        text: 'abcd'
-      }
-    })
+    const wrapper = mount(Socomodule)
     const vm: Socomodule = wrapper.vm
-    expect(vm.text).toBe('abcd')
+    expect(vm.chatopened).toBe(false)
   })
 })

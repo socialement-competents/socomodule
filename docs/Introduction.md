@@ -1,6 +1,6 @@
 >  SoCoModule is a pluggable JavaScript script that can be used without any configuration on any web page.
 
-## Install socomodule
+## Install socomodule (ES6 Modules / CommonJS)
 
 **With npm**:
 
@@ -14,6 +14,9 @@ npm install --save-dev socomodule
 yarn add -D socomodule
 ```
 
-**Download and version it yourself**:
+## Install socomodule (UMD)
+
+**Download the UMD module**:
 
 Check out the [GitHub releases](https://github.com/socialement-competents/socomodule/releases).
+Download and extract the latest socomodule-umd.zip.
