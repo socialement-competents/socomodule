@@ -6,4 +6,4 @@ umd/
 styleguide/
 npm-debug.log
 yarn-error.log
-unit/test/coverage
+test/unit/coverage

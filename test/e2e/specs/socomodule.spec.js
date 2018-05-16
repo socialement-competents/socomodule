@@ -12,6 +12,6 @@ describe('socomodule.vue', () => {
 
   it('should render correct content', () => {
     const vm = new Constructor({propsData}).$mount();
-    expect(vm.$el.innerHTML).to.equal(propsData.text);
+    expect(vm.$el.innerHTML).to.include('socobutton');
   });
 });
