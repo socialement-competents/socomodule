@@ -14,7 +14,10 @@
           <div :class="{'content':true,'op-message':m.operator}"><p>{{m.content}}</p></div>
         </div>
       </div>
-      <div class="message-form"></div>
+      <div class="message-form">
+        <textarea></textarea>
+        <button>SEND</button>
+      </div>
     </div>
     <div :class="{socobutton:true,opened:chatopened}" @click="chatopened=!chatopened">
     </div>
@@ -176,7 +179,36 @@ export default {
     background: #F5F5F5;
     z-index: 10;
     position: relative;
+    box-shadow: 0px 0px 10px grey;
+    display: flex;
+    align-items: center;
   }
+
+  .message-card .message-form textarea{
+    resize: none;
+    width: 80%;
+    margin: 0px 8px 0px 16px;
+    max-height: calc(50% - 10px);
+    border: 2px solid rgb(41, 3, 122);
+    border-radius: 4px;
+    padding: 5px;
+  }
+
+  .message-card .message-form button{
+    width: 20%;
+    margin-right: 16px;
+    height: 50%;
+    box-sizing: content-box;
+    border: 2px solid #29037a;
+    color: white;
+    border-radius: 4px;
+    background: #29037a;
+  }
+
+  .message-card .message-form button:hover{
+    cursor: pointer;
+  }
+
   .message-card .card-name{
     margin-left: 10px;
   }
