@@ -20,7 +20,7 @@
       </div>
       <div ref="messageform" class="message-form">
         <textarea ref="messageinput" @input="updateHeight" rows='2'></textarea>
-        <button>SEND</button>
+        <button @click="sendMessage">SEND</button>
       </div>
     </div>
     <div
@@ -32,6 +32,44 @@
 </template>
 
 <script>
+import Vue from 'vue'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { WebSocketLink } from 'apollo-link-ws'
+import { getMainDefinition } from 'apollo-utilities'
+import { split } from 'apollo-link'
+import fetch from 'unfetch'
+
+const httpLink = new HttpLink({
+  uri: 'https://soco-back.herokuapp.com/graphql',
+  fetch
+})
+
+const wsLink = new WebSocketLink({
+  uri: 'wss://soco-back.herokuapp.com/subscriptions',
+  options: {
+    reconnect: true
+  }
+})
+
+const link = split(
+  // split based on operation type
+  ({ query }) => {
+    const definition = getMainDefinition(query)
+    return definition.kind === 'OperationDefinition' &&
+    definition.operation === 'subscription'
+  },
+  wsLink,
+  httpLink
+)
+
+const apolloClient = new ApolloClient({
+  link,
+  cache: new InMemoryCache(),
+  connectToDevTools: true
+})
+
 /**
  * Socomponent documentation
  */
@@ -62,12 +100,18 @@ export default {
         operator:true,
         content:'Yes sure ! \nTo help you in the best possible way, do you agree to attach a screenshot of the page on which you are located ?'
       }
-    ]
+    ],
+    baseScrollHeight: 0,
+    maxRows: 8,
+    minRows: 2,
+    convId: undefined
   }),
   methods: {
     updateHeight () {
       if (this.baseScrollHeight == 0) {
         this.baseScrollHeight = this.$refs.messageinput.scrollHeight
+        this.baseMessageHeight = this.$refs.messageform.offsetHeight
+        this.baseChatContainer = this.$refs.chatcontainer.offsetHeight
       }
       this.$refs.messageinput.rows = this.minRows
       let rows = Math.ceil((this.$refs.messageinput.scrollHeight - this.baseScrollHeight) / 16)
@@ -75,6 +119,26 @@ export default {
         this.$refs.messageinput.rows = this.minRows + rows
       }else{
         this.$refs.messageinput.rows = this.maxRows
+      }
+      if(this.$refs.messageform.scrollHeight - this.baseMessageHeight > 0 && !(rows >= (this.maxRows - 1))){
+        this.$refs.chatcontainer.style.height = this.baseChatContainer - (this.$refs.messageform.scrollHeight - this.baseMessageHeight) + 'px'
+      }
+    },
+    async createConversation () {
+      const query = `
+        mutation {
+          addConversation{
+            _id
+          }
+        }
+      `
+      const { data: { addConversation: { _id } } } = await apolloClient.query({ query })
+
+      return _id
+    },
+    sendMessage () {
+      if (this.convId === undefined) {
+        this.convId = await this.createConversation()
       }
     }
   }
