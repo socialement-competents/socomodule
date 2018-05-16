@@ -1,6 +1,6 @@
 ## Use in a Vue.js app
 
-```
+```html
 <template>
   <div>
     ...

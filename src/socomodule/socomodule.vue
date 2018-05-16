@@ -14,8 +14,8 @@
           <div :class="{'content':true,'op-message':m.operator}"><p>{{m.content}}</p></div>
         </div>
       </div>
-      <div class="message-form">
-        <textarea></textarea>
+      <div ref="messageform" class="message-form">
+        <textarea ref="messageinput" @input="updateHeight"></textarea>
         <button>SEND</button>
       </div>
     </div>
@@ -45,6 +45,14 @@ export default {
         {id:'da494543fehez3874',operator:true,content:'Yes sure ! \nTo help you in the best possible way, do you agree to attach a screenshot of the page on which you are located ?'},
       ]
     })
+  },
+  methods: {
+    updateHeight () {
+      const textarea = this.$refs.messageinput
+      const height = Math.ceil((textarea.scrollHeight))
+      console.log(this.$refs.messageform.offsetHeight)
+      console.log(height)
+    }
   }
 }
 </script>
@@ -188,7 +196,8 @@ export default {
     resize: none;
     width: 80%;
     margin: 0px 8px 0px 16px;
-    max-height: calc(50% - 10px);
+    min-height: 25px;
+    height: calc(50% - 10px);
     border: 2px solid rgb(41, 3, 122);
     border-radius: 4px;
     padding: 5px;
@@ -197,7 +206,7 @@ export default {
   .message-card .message-form button{
     width: 20%;
     margin-right: 16px;
-    height: 50%;
+    height: 33px;
     box-sizing: content-box;
     border: 2px solid #29037a;
     color: white;
