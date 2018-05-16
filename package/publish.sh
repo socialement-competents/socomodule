@@ -1,6 +1,7 @@
 #!/bin/sh
 
 mkdir tmp
+mkdir tmp/umd
 
 # Append all the documentation into 1 file
 cat docs/Introduction.md >> tmp/Readme.md
@@ -9,6 +10,7 @@ cat docs/UseCase2.md >> tmp/Readme.md
 
 # Copy the required assets
 cp dist/cjs/* tmp/
+cp dist/umd/* tmp/umd/
 cp package/publish-package.json tmp/package.json
 
 # Update the version defined in package.json to the tag version
