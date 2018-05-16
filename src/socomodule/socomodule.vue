@@ -8,14 +8,14 @@
       <div class="operator">
         <p>You are now connected with <span>{{operator.name}}</span></p>
       </div>
-      <div class="chat-container">
+      <div class="chat-container" ref="chatcontainer">
         <div class="message" v-for="m in messages" :key="m.id">
           <div v-if="m.operator" class="op-pp"><img width="30px" height="30px" :src="operator.picture"/></div>
           <div :class="{'content':true,'op-message':m.operator}"><p>{{m.content}}</p></div>
         </div>
       </div>
       <div ref="messageform" class="message-form">
-        <textarea ref="messageinput" @input="updateHeight"></textarea>
+        <textarea ref="messageinput" @input="updateHeight" rows='2'></textarea>
         <button>SEND</button>
       </div>
     </div>
@@ -43,15 +43,24 @@ export default {
         {id:'ac20daz2038daafav',operator:true,content:'Hey, how can I help you ?'},
         {id:'e30fjzzdo939fkeiz',operator:false,content:'Hi, sorry I\'m completely lost I don\'t know how to use this app, can you help me please ?'},
         {id:'da494543fehez3874',operator:true,content:'Yes sure ! \nTo help you in the best possible way, do you agree to attach a screenshot of the page on which you are located ?'},
-      ]
+      ],
+      baseScrollHeight: 0,
+      minRows: 2,
+      maxRows: 8
     })
   },
   methods: {
     updateHeight () {
-      const textarea = this.$refs.messageinput
-      const height = Math.ceil((textarea.scrollHeight))
-      console.log(this.$refs.messageform.offsetHeight)
-      console.log(height)
+      if (this.baseScrollHeight == 0) {
+        this.baseScrollHeight = this.$refs.messageinput.scrollHeight
+      }
+      this.$refs.messageinput.rows = this.minRows
+      let rows = Math.ceil((this.$refs.messageinput.scrollHeight - this.baseScrollHeight) / 16)
+      if (!(rows >= (this.maxRows - 1))) {
+        this.$refs.messageinput.rows = this.minRows + rows
+      }else{
+        this.$refs.messageinput.rows = this.maxRows
+      }
     }
   }
 }
@@ -76,9 +85,14 @@ export default {
     background-repeat: no-repeat;
     background-position-x: 50%;
     background-position-y: 50%;
+    animation: socomation-close;
+    animation-duration: 0.5s;
   }
   .socobutton.opened{
+    animation-duration: 0.5s;
+    animation-name: socomation-open;
     background-image: url("../assets/cross.svg");
+    background-size: 12px;
   }
   .socobutton:hover{
     cursor: pointer;
@@ -183,29 +197,31 @@ export default {
   }
 
   .message-card .message-form{
-    height: 12%;
     background: #F5F5F5;
     z-index: 10;
-    position: relative;
+    position: absolute;
     box-shadow: 0px 0px 10px grey;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
+    width: 100%;
+    bottom: 0px;
   }
 
   .message-card .message-form textarea{
     resize: none;
     width: 80%;
-    margin: 0px 8px 0px 16px;
-    min-height: 25px;
-    height: calc(50% - 10px);
+    margin: 8px 8px 8px 16px;
     border: 2px solid rgb(41, 3, 122);
     border-radius: 4px;
     padding: 5px;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 400;
   }
 
   .message-card .message-form button{
     width: 20%;
     margin-right: 16px;
+    margin-bottom: 8px;
     height: 33px;
     box-sizing: content-box;
     border: 2px solid #29037a;
@@ -220,6 +236,40 @@ export default {
 
   .message-card .card-name{
     margin-left: 10px;
+  }
+
+  @keyframes socomation-open {
+    from {
+      background-size: 22px;
+      background-image: url("../assets/chat.svg");
+    }
+    50%{
+      background-size: 0px;
+      background-image: url("../assets/chat.svg");
+    }
+    51%{
+      background-image: url("../assets/cross.svg");
+    }
+    to {
+      background-size: 12px;
+    }
+  }
+
+  @keyframes socomation-close {
+    from {
+      background-size: 12px;
+      background-image: url("../assets/cross.svg");
+    }
+    50%{
+      background-size: 0px;
+      background-image: url("../assets/cross.svg");
+    }
+    51%{
+      background-image: url("../assets/chat.svg");
+    }
+    to {
+      background-size: 22px;
+    }
   }
 
 </style>
