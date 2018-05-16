@@ -9,7 +9,7 @@ cat docs/UseCase2.md >> tmp/Readme.md
 
 # Copy the required assets
 cp dist/cjs/* tmp/
-cp package/npm-package.json tmp/package.json
+cp package/publish-package.json tmp/package.json
 
 # Update the version defined in package.json to the tag version
 version=${CIRCLE_TAG#"v"}
