@@ -9,7 +9,7 @@ module.exports = {
     css: name + '.min.css',
   },
   sourceMap: true,
-  html: true,
+  html: false,
   presets: [
     presetKarma({
       files: ['./test/e2e/specs/**.spec.js'],
