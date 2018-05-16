@@ -10,13 +10,13 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import socomodule from 'socomodule'
 
+Vue.component('socomodule', socomodule)
+
 export default {
-  name: 'my-component',
-  components: {
-    socomodule
-  }
+  name: 'my-component'
 }
 </script>
 ```

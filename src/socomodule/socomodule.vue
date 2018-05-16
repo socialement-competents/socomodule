@@ -6,12 +6,16 @@
         <p class="card-name">Live support chat</p>
       </div>
       <div class="operator">
-        <p>You are now connected with <span>{{operator.name}}</span></p>
+        <p>You are now connected with <span>{{ operator.name }}</span></p>
       </div>
       <div class="chat-container" ref="chatcontainer">
         <div class="message" v-for="m in messages" :key="m.id">
-          <div v-if="m.operator" class="op-pp"><img width="30px" height="30px" :src="operator.picture"/></div>
-          <div :class="{'content':true,'op-message':m.operator}"><p>{{m.content}}</p></div>
+          <div v-if="m.operator" class="op-pp">
+            <img width="30px" height="30px" :src="operator.picture"/>
+          </div>
+          <div :class="{ 'content': true, 'op-message': m.operator }">
+            <p>{{ m.content }}</p>
+          </div>
         </div>
       </div>
       <div ref="messageform" class="message-form">
@@ -19,7 +23,10 @@
         <button>SEND</button>
       </div>
     </div>
-    <div :class="{socobutton:true,opened:chatopened}" @click="chatopened=!chatopened">
+    <div
+      :class="{ socobutton: true, opened: chatopened}"
+      @click="chatopened = !chatopened"
+    >
     </div>
   </div>
 </template>
@@ -30,25 +37,33 @@
  */
 export default {
   name: 'socomodule',
-  data: () => {
-    return ({
-      chatopened: false,
-      operator: {
-        id: '8292',
-        name: 'Guita',
-        picture: 'https://randomuser.me/api/portraits/women/21.jpg'
-      },
-      messages: [
-        {id:'e42fzozjd503rfnfz',operator:false,content:'I need some assistance on this app'},
-        {id:'ac20daz2038daafav',operator:true,content:'Hey, how can I help you ?'},
-        {id:'e30fjzzdo939fkeiz',operator:false,content:'Hi, sorry I\'m completely lost I don\'t know how to use this app, can you help me please ?'},
-        {id:'da494543fehez3874',operator:true,content:'Yes sure ! \nTo help you in the best possible way, do you agree to attach a screenshot of the page on which you are located ?'},
-      ],
-      baseScrollHeight: 0,
-      minRows: 2,
-      maxRows: 8
-    })
-  },
+  data: () => ({
+    chatopened: false,
+    operator: {
+      id: '8292',
+      name: 'Guita',
+      picture: 'https://randomuser.me/api/portraits/women/21.jpg'
+    },
+    messages: [
+      {
+        id:'e42fzozjd503rfnfz',
+        operator:false,
+        content:'I need some assistance on this app'
+      }, {
+        id:'ac20daz2038daafav',
+        operator:true,
+        content:'Hey, how can I help you ?'
+      }, {
+        id:'e30fjzzdo939fkeiz',
+        operator:false,
+        content:'Hi, sorry I\'m completely lost I don\'t know how to use this app, can you help me please ?'
+      }, {
+        id:'da494543fehez3874',
+        operator:true,
+        content:'Yes sure ! \nTo help you in the best possible way, do you agree to attach a screenshot of the page on which you are located ?'
+      }
+    ]
+  }),
   methods: {
     updateHeight () {
       if (this.baseScrollHeight == 0) {
