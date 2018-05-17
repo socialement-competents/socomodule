@@ -2,16 +2,20 @@
 
 ```html
 <head>
-  <script src="https://unpkg.com/vue" charset="utf-8"></script>
   <script src="socomodule.min.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/vue" charset="utf-8"></script>
   <link rel="stylesheet" type="text/css" href="socomodule.min.css">
 </head>
 
 <body>
   <!-- ... your application -->
-  <socomodule></socomodule>
-  <script type="text/javascript">
-    Vue.component('socomodule', window.Socomodule);
+  <div id="app">
+	  <socomodule></socomodule>
+  </div>
+
+  <script>
+	var sc = Vue.component('socomodule', window.Socomodule.default);
+    var app = new Vue({el: '#app'})
   </script>
 </body>
 ```
