@@ -6,7 +6,7 @@
   "main": "dist/cjs/socomodule.min.js",
   "license": "MIT",
   "scripts": {
-    "lint": "tslint -c tslint.json src/**/*.ts test/**/*.ts && eslint src/**/*.vue",
+    "lint": "tslint -c tslint.json src/**/*.ts test/**/*.ts",
     "build": "poi build --format cjs --dist dist/cjs; poi build --format umd --dist dist/umd",
     "build:doc": "vue-styleguidist build",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
