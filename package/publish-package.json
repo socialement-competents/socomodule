@@ -14,9 +14,11 @@
     "competents"
   ],
   "files": [
-    "."
-  ],
-  "dependencies": {
-    "vue": "^2.5.3"
-  }
+    "socomodule.min.js",
+    "socomodule.min.css",
+    "socomodule.min.js.map",
+    "socomodule.min.css.map",
+    "assets/chat.svg",
+    "assets/cross.svg"
+  ]
 }

@@ -12,8 +12,9 @@
 <script>
 import Vue from 'vue'
 import socomodule from 'socomodule'
+import 'socomodule/socomodule.min.css'
 
-Vue.component('socomodule', socomodule)
+Vue.component('socomodule', socomodule.default)
 
 export default {
   name: 'my-component'
