@@ -37,9 +37,6 @@ jobs:
           name: Unit test
           command: yarn unit --ci --testResultsProcessor="jest-junit"
       - run:
-          name: End to end test
-          command: yarn e2e
-      - run:
           name: Export code coverage to Codecov
           command: yarn ccov
       - run:
