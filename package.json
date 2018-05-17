@@ -33,6 +33,7 @@
     "apollo-link-http": "^1.5.4",
     "apollo-link-ws": "^1.0.8",
     "apollo-utilities": "^1.0.12",
+    "dom-to-image": "^2.6.0",
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "subscriptions-transport-ws": "^0.9.9",

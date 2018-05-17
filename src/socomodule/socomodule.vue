@@ -9,8 +9,9 @@
         <p>You are now connected with <span>{{ operator.firstname }}</span></p>
       </div>
       <div class="chat-container" ref="chatcontainer">
+        <button @click="captureScreen">Capture</button>
         <div class="message" v-for="m in messages" :key="m._id">
-          <div v-if="m.user != null" class="op-pp">
+          <div v-if="(m.user != null && m.user.image != null)" class="op-pp">
             <img width="30px" height="30px" :src="operator.image"/>
           </div>
           <div :class="{ 'content': true, 'op-message': m.user != null }">
@@ -28,6 +29,9 @@
       @click="chatopened = !chatopened"
     >
     </div>
+    <div class="overlay" @click="showping = !showping" v-show="showping">
+      <div ref="pingbutton" class="ping-button"></div>
+    </div>
   </div>
 </template>
 
@@ -41,6 +45,7 @@ import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
 import gql from 'graphql-tag'
 import fetch from 'unfetch'
+import domtoimage from 'dom-to-image';
 
 const httpLink = new createHttpLink({
   //uri: 'https://soco-back.herokuapp.com/graphql',
@@ -85,7 +90,8 @@ export default {
     baseScrollHeight: 0,
     maxRows: 8,
     minRows: 2,
-    convId: undefined
+    convId: undefined,
+    showping: false
   }),
   methods: {
     updateHeight () {
@@ -171,7 +177,24 @@ export default {
       await apolloClient.mutate({ mutation })
 
       this.$refs.messageinput.value = ''
-    }
+    },
+    captureScreen () {
+      let node = document.getElementsByTagName('html')[0]
+      let vm = this
+      domtoimage.toBlob(node).then(function (blob) {
+        let img = new Image()
+        img.src = URL.createObjectURL(blob)
+        document.body.appendChild(img)
+        vm.pingScreen(150,40)
+      }).catch(function (error) {
+        console.error('oops, something went wrong!', error)
+      });
+    },
+    pingScreen (x, y){
+      this.showping = true
+      this.$refs.pingbutton.style.top = y + 'px'
+      this.$refs.pingbutton.style.left = x + 'px'
+    } 
   }
 }
 </script>
@@ -345,6 +368,24 @@ export default {
 
   .message-card .card-name{
     margin-left: 10px;
+  }
+
+  .overlay{
+    position: absolute;
+    width: 100%;
+    top: 0px;
+    height: 100%;
+    left: 0px;
+    background: #1f1f1f91;
+  }
+
+  .overlay .ping-button{
+    width: 35px;
+    height: 35px;
+    background: red;
+    border-radius: 50%;
+    box-shadow: 0px 0px 25px red;
+    position: absolute;
   }
 
   @keyframes socomation-open {
