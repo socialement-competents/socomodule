@@ -2,18 +2,18 @@
   <div>
     <div class="message-card" v-if="chatopened">
       <div class="header">
-        <img width="20px" src="../assets/chat.svg" alt="icon"/>
+        <img width="20px" src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RU%0D%0ARCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2%0D%0AZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4%0D%0AbGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2Fw%0D%0AYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDYwIDYwIiBzdHlsZT0iZW5hYmxlLWJh%0D%0AY2tncm91bmQ6bmV3IDAgMCA2MCA2MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJw%0D%0AeCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIGQ9Ik01NCwySDZDMi43NDgsMiwwLDQuNzQ4LDAsOHYz%0D%0AM2MwLDMuMjUyLDIuNzQ4LDYsNiw2aDI4LjU1OGw5LjcwMywxMC42NzNDNDQuNDU0LDU3Ljg4NSw0%0D%0ANC43MjQsNTgsNDUsNTggIGMwLjEyMSwwLDAuMjQzLTAuMDIyLDAuMzYxLTAuMDY3QzQ1Ljc0Niw1%0D%0ANy43ODQsNDYsNTcuNDEzLDQ2LDU3VjQ3aDhjMy4yNTIsMCw2LTIuNzQ4LDYtNlY4QzYwLDQuNzQ4%0D%0ALDU3LjI1MiwyLDU0LDJ6IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=" alt="icon"/>
         <p class="card-name">Live support chat</p>
       </div>
-      <div class="operator">
-        <p>You are now connected with <span>{{ operator.name }}</span></p>
+      <div v-if="operator != undefined" class="operator">
+        <p>You are now connected with <span>{{ operator.firstname }}</span></p>
       </div>
       <div class="chat-container" ref="chatcontainer">
-        <div class="message" v-for="m in messages" :key="m.id">
-          <div v-if="m.operator" class="op-pp">
-            <img width="30px" height="30px" :src="operator.picture"/>
+        <div class="message" v-for="m in messages" :key="m._id">
+          <div v-if="m.user != null" class="op-pp">
+            <img width="30px" height="30px" :src="operator.image"/>
           </div>
-          <div :class="{ 'content': true, 'op-message': m.operator }">
+          <div :class="{ 'content': true, 'op-message': m.user != null }">
             <p>{{ m.content }}</p>
           </div>
         </div>
@@ -39,15 +39,18 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { WebSocketLink } from 'apollo-link-ws'
 import { getMainDefinition } from 'apollo-utilities'
 import { split } from 'apollo-link'
+import gql from 'graphql-tag'
 import fetch from 'unfetch'
 
-const httpLink = new HttpLink({
-  uri: 'https://soco-back.herokuapp.com/graphql',
+const httpLink = new createHttpLink({
+  //uri: 'https://soco-back.herokuapp.com/graphql',
+  uri: 'http://172.20.10.2:3000/graphql',
   fetch
 })
 
 const wsLink = new WebSocketLink({
-  uri: 'wss://soco-back.herokuapp.com/subscriptions',
+  //uri: 'wss://soco-back.herokuapp.com/subscriptions',
+  uri: 'ws://172.20.10.2:3000/subscriptions',
   options: {
     reconnect: true
   }
@@ -77,30 +80,8 @@ export default {
   name: 'socomodule',
   data: () => ({
     chatopened: false,
-    operator: {
-      id: '8292',
-      name: 'Guita',
-      picture: 'https://randomuser.me/api/portraits/women/21.jpg'
-    },
-    messages: [
-      {
-        id:'e42fzozjd503rfnfz',
-        operator:false,
-        content:'I need some assistance on this app'
-      }, {
-        id:'ac20daz2038daafav',
-        operator:true,
-        content:'Hey, how can I help you ?'
-      }, {
-        id:'e30fjzzdo939fkeiz',
-        operator:false,
-        content:'Hi, sorry I\'m completely lost I don\'t know how to use this app, can you help me please ?'
-      }, {
-        id:'da494543fehez3874',
-        operator:true,
-        content:'Yes sure ! \nTo help you in the best possible way, do you agree to attach a screenshot of the page on which you are located ?'
-      }
-    ],
+    operator: undefined,
+    messages: [],
     baseScrollHeight: 0,
     maxRows: 8,
     minRows: 2,
@@ -124,22 +105,72 @@ export default {
         this.$refs.chatcontainer.style.height = this.baseChatContainer - (this.$refs.messageform.scrollHeight - this.baseMessageHeight) + 'px'
       }
     },
+    subscribeToConversation (id) {
+      let vm = this
+
+      const CONVERSATION_SUBSCRIPTION = gql`
+        subscription message ($id: String!) {
+          messageAdded(id: $id) {
+            _id
+            content
+            user {
+              _id
+              firstname
+              lastname
+              image
+            }
+          }
+        }
+      `;
+      const observer = apolloClient.subscribe({
+        query: CONVERSATION_SUBSCRIPTION,
+        variables: {
+          id,
+        },
+      })
+      observer.subscribe({
+        next(data) {
+          console.log(data)
+          if(data.data.messageAdded.user != null){
+            vm.operator = data.data.messageAdded.user
+          }
+          vm.messages.push(data.data.messageAdded)
+        },
+        error(error) {
+          console.error(error)
+        },
+      })
+
+    },
     async createConversation () {
-      const query = `
+      const mutation = gql`
         mutation {
-          addConversation{
+          addConversation {
             _id
           }
         }
       `
-      const { data: { addConversation: { _id } } } = await apolloClient.query({ query })
+      const { data: { addConversation: { _id } } } = await apolloClient.mutate({ mutation })
 
+      this.subscribeToConversation(_id)
+
+      console.log('id : ', _id)
       return _id
     },
-    sendMessage () {
+    async sendMessage () {
       if (this.convId === undefined) {
         this.convId = await this.createConversation()
       }
+      const mutation = gql`
+        mutation{
+          addMessage(conversationId:"${this.convId}",content:"${this.$refs.messageinput.value}"){
+            _id
+          }
+        }
+      `
+      await apolloClient.mutate({ mutation })
+
+      this.$refs.messageinput.value = ''
     }
   }
 }
@@ -159,7 +190,7 @@ export default {
     border-radius: 50%;
     margin: 20px;
     box-shadow: 0px 0px 15px #29037ab5;
-    background-image: url("../assets/chat.svg");
+    background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RU%0D%0ARCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2%0D%0AZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4%0D%0AbGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2Fw%0D%0AYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDYwIDYwIiBzdHlsZT0iZW5hYmxlLWJh%0D%0AY2tncm91bmQ6bmV3IDAgMCA2MCA2MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJw%0D%0AeCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIGQ9Ik01NCwySDZDMi43NDgsMiwwLDQuNzQ4LDAsOHYz%0D%0AM2MwLDMuMjUyLDIuNzQ4LDYsNiw2aDI4LjU1OGw5LjcwMywxMC42NzNDNDQuNDU0LDU3Ljg4NSw0%0D%0ANC43MjQsNTgsNDUsNTggIGMwLjEyMSwwLDAuMjQzLTAuMDIyLDAuMzYxLTAuMDY3QzQ1Ljc0Niw1%0D%0ANy43ODQsNDYsNTcuNDEzLDQ2LDU3VjQ3aDhjMy4yNTIsMCw2LTIuNzQ4LDYtNlY4QzYwLDQuNzQ4%0D%0ALDU3LjI1MiwyLDU0LDJ6IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=");
     background-size: 22px;
     background-repeat: no-repeat;
     background-position-x: 50%;
@@ -170,7 +201,7 @@ export default {
   .socobutton.opened{
     animation-duration: 0.5s;
     animation-name: socomation-open;
-    background-image: url("../assets/cross.svg");
+    background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIw%0D%0AMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lv%0D%0Abj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMxLjExMiAz%0D%0AMS4xMTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMxLjExMiAzMS4xMTI7IiB4%0D%0AbWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8cG9seWdv%0D%0AbiBwb2ludHM9IjMxLjExMiwxLjQxNCAyOS42OTgsMCAxNS41NTYsMTQuMTQyIDEuNDE0LDAgMCwx%0D%0ALjQxNCAxNC4xNDIsMTUuNTU2IDAsMjkuNjk4IDEuNDE0LDMxLjExMiAxNS41NTYsMTYuOTcgICAy%0D%0AOS42OTgsMzEuMTEyIDMxLjExMiwyOS42OTggMTYuOTcsMTUuNTU2ICIgZmlsbD0iI0ZGRkZGRiIv%0D%0APgo8L3N2Zz4K");
     background-size: 12px;
   }
   .socobutton:hover{
@@ -222,7 +253,7 @@ export default {
 
   .message-card .chat-container .message{
     display: flex;
-    padding: 10px;
+    padding: 4px;
   }
 
   .message-card .chat-container .message .op-pp{
@@ -241,7 +272,6 @@ export default {
   }
   
   .message-card .chat-container .message .content.op-message{
-    width: calc(100% - 30px);
     display: inline-flex;
     margin-right: 15px;
     margin-left: 15px;
@@ -320,14 +350,14 @@ export default {
   @keyframes socomation-open {
     from {
       background-size: 22px;
-      background-image: url("../assets/chat.svg");
+      background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RU%0D%0ARCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2%0D%0AZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4%0D%0AbGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2Fw%0D%0AYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDYwIDYwIiBzdHlsZT0iZW5hYmxlLWJh%0D%0AY2tncm91bmQ6bmV3IDAgMCA2MCA2MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJw%0D%0AeCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIGQ9Ik01NCwySDZDMi43NDgsMiwwLDQuNzQ4LDAsOHYz%0D%0AM2MwLDMuMjUyLDIuNzQ4LDYsNiw2aDI4LjU1OGw5LjcwMywxMC42NzNDNDQuNDU0LDU3Ljg4NSw0%0D%0ANC43MjQsNTgsNDUsNTggIGMwLjEyMSwwLDAuMjQzLTAuMDIyLDAuMzYxLTAuMDY3QzQ1Ljc0Niw1%0D%0ANy43ODQsNDYsNTcuNDEzLDQ2LDU3VjQ3aDhjMy4yNTIsMCw2LTIuNzQ4LDYtNlY4QzYwLDQuNzQ4%0D%0ALDU3LjI1MiwyLDU0LDJ6IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=");
     }
     50%{
       background-size: 0px;
-      background-image: url("../assets/chat.svg");
+      background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RU%0D%0ARCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2%0D%0AZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4%0D%0AbGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2Fw%0D%0AYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDYwIDYwIiBzdHlsZT0iZW5hYmxlLWJh%0D%0AY2tncm91bmQ6bmV3IDAgMCA2MCA2MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJw%0D%0AeCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIGQ9Ik01NCwySDZDMi43NDgsMiwwLDQuNzQ4LDAsOHYz%0D%0AM2MwLDMuMjUyLDIuNzQ4LDYsNiw2aDI4LjU1OGw5LjcwMywxMC42NzNDNDQuNDU0LDU3Ljg4NSw0%0D%0ANC43MjQsNTgsNDUsNTggIGMwLjEyMSwwLDAuMjQzLTAuMDIyLDAuMzYxLTAuMDY3QzQ1Ljc0Niw1%0D%0ANy43ODQsNDYsNTcuNDEzLDQ2LDU3VjQ3aDhjMy4yNTIsMCw2LTIuNzQ4LDYtNlY4QzYwLDQuNzQ4%0D%0ALDU3LjI1MiwyLDU0LDJ6IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=");
     }
     51%{
-      background-image: url("../assets/cross.svg");
+      background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIw%0D%0AMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lv%0D%0Abj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMxLjExMiAz%0D%0AMS4xMTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMxLjExMiAzMS4xMTI7IiB4%0D%0AbWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8cG9seWdv%0D%0AbiBwb2ludHM9IjMxLjExMiwxLjQxNCAyOS42OTgsMCAxNS41NTYsMTQuMTQyIDEuNDE0LDAgMCwx%0D%0ALjQxNCAxNC4xNDIsMTUuNTU2IDAsMjkuNjk4IDEuNDE0LDMxLjExMiAxNS41NTYsMTYuOTcgICAy%0D%0AOS42OTgsMzEuMTEyIDMxLjExMiwyOS42OTggMTYuOTcsMTUuNTU2ICIgZmlsbD0iI0ZGRkZGRiIv%0D%0APgo8L3N2Zz4K");
     }
     to {
       background-size: 12px;
@@ -337,14 +367,14 @@ export default {
   @keyframes socomation-close {
     from {
       background-size: 12px;
-      background-image: url("../assets/cross.svg");
+      background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIw%0D%0AMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lv%0D%0Abj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMxLjExMiAz%0D%0AMS4xMTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMxLjExMiAzMS4xMTI7IiB4%0D%0AbWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8cG9seWdv%0D%0AbiBwb2ludHM9IjMxLjExMiwxLjQxNCAyOS42OTgsMCAxNS41NTYsMTQuMTQyIDEuNDE0LDAgMCwx%0D%0ALjQxNCAxNC4xNDIsMTUuNTU2IDAsMjkuNjk4IDEuNDE0LDMxLjExMiAxNS41NTYsMTYuOTcgICAy%0D%0AOS42OTgsMzEuMTEyIDMxLjExMiwyOS42OTggMTYuOTcsMTUuNTU2ICIgZmlsbD0iI0ZGRkZGRiIv%0D%0APgo8L3N2Zz4K");
     }
     50%{
       background-size: 0px;
-      background-image: url("../assets/cross.svg");
+      background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTkuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIw%0D%0AMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lv%0D%0Abj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDMxLjExMiAz%0D%0AMS4xMTIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDMxLjExMiAzMS4xMTI7IiB4%0D%0AbWw6c3BhY2U9InByZXNlcnZlIiB3aWR0aD0iNTEycHgiIGhlaWdodD0iNTEycHgiPgo8cG9seWdv%0D%0AbiBwb2ludHM9IjMxLjExMiwxLjQxNCAyOS42OTgsMCAxNS41NTYsMTQuMTQyIDEuNDE0LDAgMCwx%0D%0ALjQxNCAxNC4xNDIsMTUuNTU2IDAsMjkuNjk4IDEuNDE0LDMxLjExMiAxNS41NTYsMTYuOTcgICAy%0D%0AOS42OTgsMzEuMTEyIDMxLjExMiwyOS42OTggMTYuOTcsMTUuNTU2ICIgZmlsbD0iI0ZGRkZGRiIv%0D%0APgo8L3N2Zz4K");
     }
     51%{
-      background-image: url("../assets/chat.svg");
+      background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRv%0D%0AcjogQWRvYmUgSWxsdXN0cmF0b3IgMTguMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVy%0D%0Ac2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RU%0D%0ARCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2%0D%0AZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4%0D%0AbGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2Fw%0D%0AYV8xIiB4PSIwcHgiIHk9IjBweCIgdmlld0JveD0iMCAwIDYwIDYwIiBzdHlsZT0iZW5hYmxlLWJh%0D%0AY2tncm91bmQ6bmV3IDAgMCA2MCA2MDsiIHhtbDpzcGFjZT0icHJlc2VydmUiIHdpZHRoPSI1MTJw%0D%0AeCIgaGVpZ2h0PSI1MTJweCI+CjxwYXRoIGQ9Ik01NCwySDZDMi43NDgsMiwwLDQuNzQ4LDAsOHYz%0D%0AM2MwLDMuMjUyLDIuNzQ4LDYsNiw2aDI4LjU1OGw5LjcwMywxMC42NzNDNDQuNDU0LDU3Ljg4NSw0%0D%0ANC43MjQsNTgsNDUsNTggIGMwLjEyMSwwLDAuMjQzLTAuMDIyLDAuMzYxLTAuMDY3QzQ1Ljc0Niw1%0D%0ANy43ODQsNDYsNTcuNDEzLDQ2LDU3VjQ3aDhjMy4yNTIsMCw2LTIuNzQ4LDYtNlY4QzYwLDQuNzQ4%0D%0ALDU3LjI1MiwyLDU0LDJ6IiBmaWxsPSIjRkZGRkZGIi8+Cjwvc3ZnPgo=");
     }
     to {
       background-size: 22px;
