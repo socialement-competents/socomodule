@@ -16,7 +16,11 @@ yarn add -D socomodule
 
 ## Install socomodule (UMD)
 
-**Download the UMD module**:
+Download the UMD module:
 
-Check out the [GitHub releases](https://github.com/socialement-competents/socomodule/releases).
+Check out the latest [GitHub releases](https://github.com/socialement-competents/socomodule/releases).
 Download and extract the latest socomodule-umd.zip.
+
+Or just use the unpkg CDN, for exemple:
+https://unpkg.com/socomodule@1.1.5/umd/socomodule.min.js
+https://unpkg.com/socomodule@1.1.5/umd/socomodule.min.css

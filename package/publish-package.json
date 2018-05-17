@@ -18,7 +18,9 @@
     "socomodule.min.css",
     "socomodule.min.js.map",
     "socomodule.min.css.map",
-    "assets/chat.svg",
-    "assets/cross.svg"
+    "umd/socomodule.min.js",
+    "umd/socomodule.min.css",
+    "umd/socomodule.min.js.map",
+    "umd/socomodule.min.css.map"
   ]
 }

@@ -1,5 +1,7 @@
 ## Use in any web application
 
+[Exemple](https://codepen.io/tsauvajon/pen/JvmrEo) in CodePen
+
 ```html
 <head>
   <script src="socomodule.min.js" charset="utf-8"></script>

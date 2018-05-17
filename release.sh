@@ -12,6 +12,22 @@ $GR release \
   --tag $CIRCLE_TAG \
   --name $CIRCLE_TAG
 
+FILENAME=socomodule.min
+
+$GR upload \
+  --user $CIRCLE_PROJECT_USERNAME \
+  --repo $CIRCLE_PROJECT_REPONAME \
+  --tag $CIRCLE_TAG \
+  --name $FILENAME.js \
+  --file umd/$FILENAME.js
+
+$GR upload \
+  --user $CIRCLE_PROJECT_USERNAME \
+  --repo $CIRCLE_PROJECT_REPONAME \
+  --tag $CIRCLE_TAG \
+  --name $FILENAME.css \
+  --file umd/$FILENAME.css
+
 # Add all files and folders, recursively, to a tag-named .zip
 cd umd
 UMD_FILENAME="$CIRCLE_PROJECT_REPONAME-umd-$CIRCLE_TAG.zip"
