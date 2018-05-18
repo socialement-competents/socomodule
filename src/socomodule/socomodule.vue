@@ -47,14 +47,14 @@ import fetch from 'unfetch'
 import domtoimage from 'dom-to-image';
 
 const httpLink = new createHttpLink({
-  //uri: 'https://soco-back.herokuapp.com/graphql',
-  uri: 'http://172.20.10.2:3000/graphql',
+  uri: 'https://soco-back.herokuapp.com/graphql',
+  //uri: 'http://172.20.10.2:3000/graphql',
   fetch
 })
 
 const wsLink = new WebSocketLink({
-  //uri: 'wss://soco-back.herokuapp.com/subscriptions',
-  uri: 'ws://172.20.10.2:3000/subscriptions',
+  uri: 'wss://soco-back.herokuapp.com/subscriptions',
+  //uri: 'ws://172.20.10.2:3000/subscriptions',
   options: {
     reconnect: true
   }
