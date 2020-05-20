@@ -1,6 +1,9 @@
 # socomodule
 
-> A Vue.js component module
+
+## Project documentation
+
+See [sococoin](https://github.com/socialement-competents/sococoin).
 
 ## Installation
 
